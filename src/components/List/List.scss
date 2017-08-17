@@ -1,0 +1,23 @@
+.bd-list {
+  position: relative;
+  display: inline-block;
+  width: 33%;
+  height: 100%;
+  padding: 0 2rem;
+  overflow: hidden;
+  vertical-align: top;
+  white-space: normal;
+  &:not(:last-child):after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: .1rem;
+    height: 99%;
+    background: linear-gradient(to bottom, #eee 0%, #ccc 50%, #eee 100%) fixed;
+  }
+  .list {
+    overflow: auto;
+    height: calc(100% - 4rem);
+  }
+}

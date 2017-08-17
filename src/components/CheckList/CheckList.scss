@@ -1,0 +1,32 @@
+@import '../../styles/base.scss';
+
+.bd-check-list {
+  input {
+    margin-right: .4rem;
+    cursor: pointer;
+  }
+  .tasks {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: $dashBorder;    
+  }
+  .fin {
+    text-decoration: line-through;
+  }
+  .task:hover {
+    background-color: #eee;
+  }
+  .remove {
+    float: right;
+    i {
+      color: #900;
+    }
+  }
+  .add-task {
+    width: 100%;
+    margin-top: .5rem;
+    padding: 1rem;
+    border: $dashBorder;
+    border-radius: $borderRadius;
+  }
+}

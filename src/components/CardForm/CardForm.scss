@@ -1,0 +1,59 @@
+@import '../../styles/base.scss';
+
+.bd-card-form {
+  .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, .6);
+  }
+  .actions {
+    margin-top: .8rem;
+    text-align: right;
+  }
+  .card.big {
+    position: absolute;
+    width: 38rem;
+    height: 18rem;
+    top: 0;
+    right: 0;
+    bottom: 10rem;
+    left: 0;
+    font-size: 1rem;
+    margin: 3rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    white-space: normal;
+    z-index: 3;
+    input[type=text], textarea {
+      width: 100%;
+      margin: .3rem 0;
+      border: none;
+      font-size: 1rem;
+      resize: none;
+      &:focus {
+        outline: dashed thin #999;
+        outline-offset: .2rem;
+      }
+    }
+    input[type=text] {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    label {
+      display: inline-block;
+      width: 4rem;
+      margin: .3rem 0 .7rem .3rem;
+      color: #a7a7a7;
+    }
+    button {
+      padding: .4rem;
+      font-size: .8rem;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.float-button {
+  position: absolute;
+  width: 6.5rem;
+  height: 6.5rem;
+  right: 2rem;
+  bottom: 2rem;
+  text-align: center;
+  z-index: 2;
+  a {
+    display: inline-block;
+    width: 5.6rem;
+    height: 5.6rem;
+    border-radius: 100%;
+    background-color: #d43a2f;
+    color: #fff;
+    font-size: 3.4rem;
+    line-height: 5rem;
+    text-decoration: none;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .5);
+  }
+}

@@ -1,0 +1,63 @@
+@import '../../styles/base.scss';
+
+.bd-card {
+  position: relative;
+  width: 100%;
+  margin: 0 0 1rem;
+  padding: 1rem 1rem 1rem 1.5rem;
+  border: $solidBorder;
+  border-radius: $borderRadius;
+  background-color: $backColor;
+  box-shadow: 0 .1rem 0 rgba(0, 0, 0, .25);
+  text-align: left;
+  overflow: auto;
+  z-index: 1;
+  .title {
+    font-weight: bold;
+    border-bottom: .5rem solid transparent;
+    cursor: pointer;
+  }
+  .toggle-enter {
+    max-height: 0;
+    overflow: hidden;
+  }
+  .toggle-enter.toggle-enter-active {
+    max-height: 30rem;
+    overflow: hidden;
+    transition: max-height .25s ease-in;
+  }
+  .toggle-leave {
+    max-height: 30rem;
+    overflow: hidden;
+  }
+  .toggle-leave.toggle-leave-active {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .25s ease-out;
+  }
+  .card-edit, .card-delete {
+    position: absolute;
+    top: 1rem;
+    opacity: 0;
+    transition: opacity .25s ease-in;
+    a {
+      font-size: 1rem;
+      text-decoration: none;
+    }  
+  }
+  .card-edit {
+    right: 1rem;
+    a {
+      color: #999;
+    }
+  }
+  .card-delete {
+    right: 2.5rem;
+    a {
+      color: #900;
+    }
+  }
+  &:hover .card-edit, &:hover .card-delete {
+    opacity: 1;
+  }
+}
