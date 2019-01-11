@@ -1,27 +1,31 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import marked from 'marked'
 import CheckList from '../CheckList'
+import CardStore from '../../stores/CardStore'
 import './Card.scss'
 import { card, cardDefault } from '@/props'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { DragSource, DropTarget } from 'react-dnd'
 import constants from '@/libs/constants'
 import { Link } from 'react-router-dom'
+import CardActionCreators from '../../actions/CardActionCreators'
 
 const cardDragSpec = {
   beginDrag ({ id, status }) {
     return { id, status }
   },
-  endDrag ({ cardCallbacks, id, status }) {
-    cardCallbacks.persistCardDrag(id, status)
+  endDrag (props) {
+    CardActionCreators.persistCardDrag(props)
   }
 }
 
 const cardDropSpec = {
-  hover ({ cardCallbacks, id }, monitor) {
+  hover ({ id }, monitor) {
     const draggedId = monitor.getItem().id
-    cardCallbacks.updatePosition(draggedId, id)
+    if (id !== draggedId) {
+      CardActionCreators.updateCardPosition(draggedId, id)
+    }
   }
 }
 
@@ -36,33 +40,28 @@ const collectDrop = ({ dropTarget }, monitor) => ({
 @DragSource(constants.CARD, cardDragSpec, collectDrag)
 @DropTarget(constants.CARD, cardDropSpec, collectDrop)
 export default class Card extends Component {
+  // static propTypes = Object.assign(
+  //   { connectDragSource: PropTypes.func.isRequired },
+  //   card
+  // )
+  static propTypes = card
+  static defaultProps = cardDefault
   constructor () {
     super(...arguments)
-    this.state = {
-      showDetails: false
-    }
     this.toggleDetails = this::this.toggleDetails
     this.deleteCard = this::this.deleteCard
   }
-  static propTypes = Object.assign(
-    {
-      connectDragSource: PropTypes.func.isRequired
-    },
-    card
-  )
-  static defaultProps = cardDefault
   toggleDetails () {
-    const { showDetails } = this.state
-    this.setState({showDetails: !showDetails})
+    const { id } = this.props
+    CardActionCreators.toggleCardDetails(id)
   }
   deleteCard () {
-    const { cardCallbacks, id } = this.props
-    cardCallbacks.deleteCard(id)
+    const { id } = this.props
+    CardActionCreators.deleteCard(CardStore.getCard(id))
   }
   render () {
     const { id, title, description, tasks, taskCallbacks,
-      color, connectDragSource, connectDropTarget } = this.props
-    const { showDetails } = this.state
+      color, showDetails, connectDragSource, connectDropTarget } = this.props
     const sideColor = {
       position: 'absolute',
       zIndex: -1,
@@ -82,7 +81,7 @@ export default class Card extends Component {
           <Link to={`/edit/${id}`}><i className='fa fa-pencil' /></Link>
         </div>
         <div
-          className={`title`}
+          className={'title'}
           onClick={this.toggleDetails}
         ><i className={`fa fa-caret-${showDetails ? 'down' : 'right'}`} />&nbsp;{title}</div>
         <ReactCSSTransitionGroup

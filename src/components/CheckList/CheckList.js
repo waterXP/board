@@ -1,33 +1,30 @@
 import React, { Component } from 'react'
 import './CheckList.scss'
 import { checkList, checkListDefault } from '@/props'
+import TaskActionCreators from '../../actions/TaskActionCreators'
 
 class CheckList extends Component {
   constructor () {
     super(...arguments)
     this.checkInputKeyPress = this::this.checkInputKeyPress
-    this.handleBlur = this::this.handleBlur
+    this.addTask = this::this.addTask
   }
   checkInputKeyPress (e) {
-    if (e.target.value) {
-      const { cardId, taskCallbacks } = this.props
-      if (e.key === 'Enter') {
-        taskCallbacks.add(cardId, e.target.value)
-        e.target.value = ''
-      }
+    if (e.key === 'Enter') {
+      this.addTask(e)
     }
   }
-  handleBlur (e) {
+  addTask (e) {
     if (e.target.value) {
-      const { cardId, taskCallbacks } = this.props
-      taskCallbacks.add(cardId, e.target.value)
+      const { cardId } = this.props
+      TaskActionCreators.addTask(cardId, e.target.value)
       e.target.value = ''
     }
   }
-  handleChange = (cardId, id, i) =>
-    this.props.taskCallbacks.toggle.bind(this, cardId, id, i)
-  handleClick = (cardId, id, i) =>
-    this.props.taskCallbacks.delete.bind(this, cardId, id, i)
+  handleChange = (cardId, v, i) =>
+    TaskActionCreators.toggleTask.bind(this, cardId, v, i)
+  handleClick = (cardId, v, i) =>
+    TaskActionCreators.deleteTask.bind(this, cardId, v, i)
 
   render () {
     const { cardId, tasks } = this.props
@@ -36,13 +33,13 @@ class CheckList extends Component {
         <input
           type='checkbox'
           defaultChecked={v.done}
-          onChange={this.handleChange(cardId, v.id, i)}
+          onChange={this.handleChange(cardId, v, i)}
         />
         {v.name}
         <a
           href='javascript:;'
           className='remove'
-          onClick={this.handleClick(cardId, v.id, i)}
+          onClick={this.handleClick(cardId, v, i)}
         >
           <i className='fa fa-times' />
         </a>
@@ -56,7 +53,7 @@ class CheckList extends Component {
           type='text'
           placeholder='Type then hit Enter to add a task'
           onKeyPress={this.checkInputKeyPress}
-          onBlur={this.handleBlur}
+          onBlur={this.addTask}
         />
       </div>
     )

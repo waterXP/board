@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import CardForm from '../CardForm'
+import CardStore from '../../stores/CardStore'
+import DraftStore from '../../stores/DraftStore'
+import { Container } from 'flux/utils'
+import CardActionCreators from '../../actions/CardActionCreators'
 
 class EditCard extends Component {
   static propTypes = {
-    cards: PropTypes.array,
     match: PropTypes.object,
-    cardCallbacks: PropTypes.object,
     history: PropTypes.object
   }
   constructor () {
@@ -15,22 +17,25 @@ class EditCard extends Component {
     this.handleClose = this::this.handleClose
     this.handleSubmit = this::this.handleSubmit
   }
-  componentWillMount () {
-    const { cards, match } = this.props
-    let card = cards.find((v) => v.id === +match.params.cardId)
+  componentDidMount () {
+    const { match } = this.props
+    const card = CardStore.getCard(+match.params.cardId)
     if (!card) {
       this.handleClose()
     }
-    this.setState({...card})
+    setTimeout(() => CardActionCreators.createDraft(card))
   }
 
   handleChange (field, value) {
-    this.setState({ [field]: value })
+    CardActionCreators.updateDraft(field, value)
   }
   handleSubmit (e) {
-    const { cardCallbacks, history } = this.props
+    const { match, history } = this.props
     e.preventDefault()
-    cardCallbacks.updateCard(this.state)
+    CardActionCreators.updateCard(
+      CardStore.getCard(+match.params.cardId),
+      this.state.draft
+    )
     history.push('/')
   }
   handleClose () {
@@ -40,7 +45,7 @@ class EditCard extends Component {
   render () {
     return (
       <CardForm
-        draftCard={this.state}
+        draftCard={this.state.draft}
         buttonLabel='Edit Card'
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
@@ -50,4 +55,9 @@ class EditCard extends Component {
   }
 }
 
-export default EditCard
+EditCard.getStores = () => ([DraftStore])
+EditCard.calculateState = (prevState) => ({
+  draft: DraftStore.getState()
+})
+
+export default Container.create(EditCard)

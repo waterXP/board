@@ -43,8 +43,7 @@ class Board extends Component {
   }
 
   render () {
-    const { cards, taskCallbacks, cardCallbacks,
-      children, connectDropTarget } = this.props
+    const { cards, children, connectDropTarget } = this.props
     const { left, top } = this.state
     return connectDropTarget(
       <div className='bd-board'>
@@ -52,22 +51,16 @@ class Board extends Component {
         <List
           id='todo'
           title='To Do'
-          taskCallbacks={taskCallbacks}
-          cardCallbacks={cardCallbacks}
           cards={cards.filter((card) => card.status === 'todo')}
         />
         <List
           id='in-progress'
           title='In Progress'
-          taskCallbacks={taskCallbacks}
-          cardCallbacks={cardCallbacks}
           cards={cards.filter((card) => card.status === 'in-progress')}
         />
         <List
           id='done'
           title='Done'
-          taskCallbacks={taskCallbacks}
-          cardCallbacks={cardCallbacks}
           cards={cards.filter((card) => card.status === 'done')}
         />
         { children }

@@ -1,7 +1,7 @@
-import { Dispatcher } from 'flex'
+import { Dispatcher } from 'flux'
 
 class AppDispatcher extends Dispatcher {
-  dispatchAsycn (promise, types, payload) {
+  dispatchAsync (promise, types, payload) {
     const { request, success, failure } = types
     this.dispatch({
       type: request,

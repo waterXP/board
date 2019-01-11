@@ -29,8 +29,8 @@ class CardForm extends Component {
           <form onSubmit={this.handleSubmit}>
             <input
               type='text'
+              value={draftCard.title || ''}
               name='title'
-              value={draftCard.title}
               onChange={this.handleChange}
               placeholder='Title'
               required

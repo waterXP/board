@@ -4,11 +4,12 @@ import './List.scss'
 import { cardlist, cardListDefault } from '@/props'
 import { DropTarget } from 'react-dnd'
 import constants from '@/libs/constants'
+import CardActionCreators from '../../actions/CardActionCreators'
 
 const listTargetSpec = {
-  hover ({ id, cardCallbacks }, monitor) {
+  hover ({ id }, monitor) {
     const draggedId = monitor.getItem().id
-    cardCallbacks.updateStatus(draggedId, id)
+    CardActionCreators.updateCardStatus(draggedId, id)
   }
 }
 
@@ -18,16 +19,8 @@ function collect ({ dropTarget }, monitor) {
   }
 }
 
-const List = ({ cards, title, taskCallbacks,
-  cardCallbacks, connectDropTarget }) => {
-  const list = cards.map((v) =>
-    <Card
-      key={v.id}
-      taskCallbacks={taskCallbacks}
-      cardCallbacks={cardCallbacks}
-      {...v}
-    />
-  )
+const List = ({ cards, title, connectDropTarget }) => {
+  const list = cards.map((v) => <Card key={v.id} {...v} />)
   return connectDropTarget(
     <div className='bd-list'>
       <h1>{title}</h1>

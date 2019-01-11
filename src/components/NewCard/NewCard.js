@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import CardForm from '../CardForm'
+import DraftStore from '../../stores/DraftStore'
+import { Container } from 'flux/utils'
+import CardActionCreators from '../../actions/CardActionCreators'
 
 class NewCard extends Component {
   static propTypes = {
-    cardCallbacks: PropTypes.object,
     history: PropTypes.object
   }
 
@@ -15,23 +17,16 @@ class NewCard extends Component {
     this.handleSubmit = this::this.handleSubmit
   }
   componentWillMount () {
-    this.setState({
-      id: Date.now(),
-      title: '',
-      description: '',
-      status: 'todo',
-      color: '#c9c9c9',
-      tasks: []
-    })
+    setTimeout(() => CardActionCreators.createDraft())
   }
 
   handleChange (field, value) {
-    this.setState({ [field]: value })
+    CardActionCreators.updateDraft(field, value)
   }
   handleSubmit (e) {
-    const { cardCallbacks, history } = this.props
+    const { history } = this.props
     e.preventDefault()
-    cardCallbacks.addCard(this.state)
+    CardActionCreators.addCard(this.state.draft)
     history.push('/')
   }
   handleClose () {
@@ -41,7 +36,7 @@ class NewCard extends Component {
   render () {
     return (
       <CardForm
-        draftCard={this.state}
+        draftCard={this.state.draft}
         buttonLabel='Create Card'
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
@@ -51,4 +46,9 @@ class NewCard extends Component {
   }
 }
 
-export default NewCard
+NewCard.getStores = () => ([DraftStore])
+NewCard.calculateState = (prevState) => ({
+  draft: DraftStore.getState()
+})
+
+export default Container.create(NewCard)
